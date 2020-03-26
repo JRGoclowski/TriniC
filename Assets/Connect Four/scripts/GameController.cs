@@ -9,8 +9,8 @@ namespace ConnectFour
 		enum Piece
 		{
 			Empty = 0,
-			Blue = 1,
-			Red = 2
+			Player2 = 1,
+			Player1 = 2
 		}
 
 		[Range(3, 8)]
@@ -27,13 +27,13 @@ namespace ConnectFour
 		public float dropTime = 4f;
 
 		// Gameobjects 
-		public GameObject pieceRed;
-		public GameObject pieceBlue;
+		public GameObject player1;
+		public GameObject player2;
 		public GameObject pieceField;
 
 		public GameObject winningText;
-		public string playerWonText = "You Won!";
-		public string playerLoseText = "You Lose!";
+		public string playerWonText = "Player 1 Won!";
+		public string playerLoseText = "Player 2 Won!";
 		public string drawText = "Draw!";
 
 		public GameObject btnPlayAgain;
@@ -141,7 +141,7 @@ namespace ConnectFour
 			}
 
 			GameObject g = Instantiate(
-					isPlayersTurn ? pieceBlue : pieceRed, // is players turn = spawn blue, else spawn red
+					isPlayersTurn ? player2 : player1, // is players turn = spawn player 2's piece, else spawn player 1
 					new Vector3(
 					Mathf.Clamp(spawnPos.x, 0, numColumns-1), 
 					gameObjectField.transform.position.y + 1, 0), // spawn it above the first row
@@ -198,8 +198,8 @@ namespace ConnectFour
 				return;
 			}
 
-			if(isPlayersTurn)
-			{
+			// if(isPlayersTurn)
+			// {
 				if(gameObjectTurn == null)
 				{
 					gameObjectTurn = SpawnPiece();
@@ -224,19 +224,43 @@ namespace ConnectFour
 						mouseButtonPressed = false;
 					}
 				}
-			}
-			else
-			{
-				if(gameObjectTurn == null)
-				{
-					gameObjectTurn = SpawnPiece();
-				}
-				else
-				{
-					if(!isDropping)
-						StartCoroutine(dropPiece(gameObjectTurn));
-				}
-			}
+			// }
+			// else
+			// {
+			// 	// if(gameObjectTurn == null)
+			// 	// {
+			// 	// 	gameObjectTurn = SpawnPiece();
+			// 	// }
+			// 	// else
+			// 	// {
+			// 	// 	if(!isDropping)
+			// 	// 		StartCoroutine(dropPiece(gameObjectTurn));
+			// 	// }
+			// 	if(gameObjectTurn == null)
+			// 	{
+			// 		gameObjectTurn = SpawnPiece();
+			// 	}
+			// 	else
+			// 	{
+			// 		// update the objects position
+			// 		Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+			// 		gameObjectTurn.transform.position = new Vector3(
+			// 			Mathf.Clamp(pos.x, 0, numColumns-1), 
+			// 			gameObjectField.transform.position.y + 1, 0);
+
+			// 		// click the left mouse button to drop the piece into the selected column
+			// 		if(Input.GetMouseButtonDown(0) && !mouseButtonPressed && !isDropping)
+			// 		{
+			// 			mouseButtonPressed= true;
+
+			// 			StartCoroutine(dropPiece(gameObjectTurn));
+			// 		}
+			// 		else
+			// 		{
+			// 			mouseButtonPressed = false;
+			// 		}
+			// 	}
+			// }
 		}
 
 		/// <summary>
@@ -283,7 +307,7 @@ namespace ConnectFour
 				if(field[x, i] == 0)
 				{
 					foundFreeCell = true;
-					field[x, i] = isPlayersTurn ? (int)Piece.Blue : (int)Piece.Red;
+					field[x, i] = isPlayersTurn ? (int)Piece.Player2 : (int)Piece.Player1;
 					endPosition = new Vector3(x, i * -1, startPosition.z);
 
 					break;
@@ -343,7 +367,7 @@ namespace ConnectFour
 					int layermask = isPlayersTurn ? (1 << 8) : (1 << 9);
 
 					// If its Players turn ignore red as Starting piece and wise versa
-					if(field[x, y] != (isPlayersTurn ? (int)Piece.Blue : (int)Piece.Red))
+					if(field[x, y] != (isPlayersTurn ? (int)Piece.Player2 : (int)Piece.Player1))
 					{
 						continue;
 					}
